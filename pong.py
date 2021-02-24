@@ -50,7 +50,7 @@ points.color("white")
 points.penup()
 points.hideturtle()
 points.goto(0,260)
-points.write(f"Player A: {score_left}  Player B: {score_right}", align="center", font=("Courier", 20, "normal"))
+points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}", align="center", font=("Courier", 20, "normal"))
 
 # Functions
 def start_game():
@@ -107,13 +107,13 @@ while True:
         ball.dx *= -1
         score_left += 1
         points.clear()
-        points.write(f"Player A: {score_left}  Player B: {score_right}", align="center", font=("Courier", 20, "normal"))
+        points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}", align="center", font=("Courier", 20, "normal"))
     elif ball.xcor() < -390:
         ball.goto(0,0)
         ball.dx *= -1
         score_right +=1
         points.clear()
-        points.write(f"Player A: {score_left}  Player B: {score_right}", align="center", font=("Courier", 20, "normal"))
+        points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}", align="center", font=("Courier", 20, "normal"))
 
     # Paddle colision
     if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < (right_paddle.ycor() +50) and ball.ycor() > (right_paddle.ycor() -50)):
@@ -122,3 +122,11 @@ while True:
     elif (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < (left_paddle.ycor() +50) and ball.ycor() > (left_paddle.ycor() -50)):
         ball.setx(-340)
         ball.dx *= -1
+
+    # Winning condition
+    if (score_left >= 3) or (score_right >= 3):
+        start = False
+        if score_left > score_right:
+            menu.write(f"PLAYER A WINS", align="center", font=("Courier", 35, "normal"))
+        else:
+            menu.write(f"PLAYER B WINS", align="center", font=("Courier", 35, "normal"))
