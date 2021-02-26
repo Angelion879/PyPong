@@ -8,16 +8,6 @@ wind.bgcolor("black")
 wind.setup(width=800, height=600)
 wind.tracer(0)
 
-# Menu
-menu = turtle.Turtle()
-menu.speed(0)
-menu.color("white")
-menu.penup()
-menu.hideturtle()
-menu.goto(0, 15)
-menu.write("PRESS SPACE TO START", align="center",
-           font=("Courier", 35, "normal"))
-
 # Objects in the screen:
 
 
@@ -42,22 +32,30 @@ class Ball(turtle.Turtle):
         self.dy = 0.2
 
 
+class Text(turtle.Turtle):
+    def __init__(self, position, message, l_size):
+        super().__init__()
+        self.speed(0)
+        self.color("white")
+        self.penup()
+        self.hideturtle()
+        self.goto(position)
+        self.write(message, align="center", font=("Courier", l_size, "normal"))
+
+
+menu = Text((0, 20), "PRESS SPACE TO START", 35)
 left_paddle = Paddle((-360, 0))
 right_paddle = Paddle((360, 0))
 ball = Ball((0, 0))
 start = False
+# AI Starter
+pc_play = False
 
 # Point Writing
 score_left = 0
 score_right = 0
-points = turtle.Turtle()
-points.speed(0)
-points.color("white")
-points.penup()
-points.hideturtle()
-points.goto(0, 260)
-points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}",
-             align="center", font=("Courier", 20, "normal"))
+points = Text(
+    (0, 260), f"Player A: {score_left}\t\t\tPlayer B: {score_right}", 20)
 
 # Functions
 
@@ -65,6 +63,10 @@ points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}",
 def start_game():
     global start
     start = True
+
+
+def exit_game():
+    turtle.bye()
 
 
 def left_paddle_up():
@@ -98,6 +100,7 @@ wind.onkeypress(right_paddle_up, 'Up')
 wind.onkeypress(left_paddle_down, 's')
 wind.onkeypress(right_paddle_down, 'Down')
 wind.onkeypress(start_game, 'space')
+wind.onkeypress(exit_game, 'Escape')
 
 
 # Main game loop
@@ -139,6 +142,13 @@ while True:
     elif (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < (left_paddle.ycor() + 50) and ball.ycor() > (left_paddle.ycor() - 50)):
         ball.setx(-340)
         ball.dx *= -1
+
+    # AI Player
+    if pc_play == True:
+        if left_paddle.ycor() < ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
+            left_paddle_up()
+        elif left_paddle.ycor() > ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
+            left_paddle_down()
 
     # Winning condition
     if (score_left >= 3) or (score_right >= 3):
