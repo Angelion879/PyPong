@@ -64,6 +64,7 @@ class Option(turtle.Turtle):
 
 
 menu = Text((0, 20), "PRESS SPACE TO START", 35)
+exit_message = Text((0, -290), "PRESS ESC TO EXIT", 10)
 left_paddle = Paddle((-360, 0))
 right_paddle = Paddle((360, 0))
 ball = Ball((0, 0))
@@ -80,7 +81,7 @@ pc_play = False
 score_left = 0
 score_right = 0
 points = Text(
-    (0, 260), f"Player A: {score_left}\t\t\tPlayer B: {score_right}", 20)
+    (0, 260), f"A: {score_left}\t\t\t\t\tB: {score_right}", 20)
 
 # Functions
 
@@ -175,14 +176,14 @@ while True:
         ball.dx *= -1
         score_left += 1
         points.clear()
-        points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}",
+        points.write(f"A: {score_left}\t\t\t\t\tB: {score_right}",
                      align="center", font=("Courier", 20, "normal"))
     elif ball.xcor() < -390:
         ball.goto(0, 0)
         ball.dx *= -1
         score_right += 1
         points.clear()
-        points.write(f"Player A: {score_left}\t\t\tPlayer B: {score_right}",
+        points.write(f"A: {score_left}\t\t\t\t\tB: {score_right}",
                      align="center", font=("Courier", 20, "normal"))
 
     # Paddle colision
