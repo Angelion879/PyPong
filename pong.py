@@ -28,8 +28,8 @@ class Ball(turtle.Turtle):
         self.color("white")
         self.penup()
         self.goto(position)
-        self.dx = 0.2
-        self.dy = 0.2
+        self.dx = 0.5
+        self.dy = 0.5
 
 
 class Text(turtle.Turtle):
@@ -42,13 +42,38 @@ class Text(turtle.Turtle):
         self.goto(position)
         self.write(message, align="center", font=("Courier", l_size, "normal"))
 
+class SelectionArrow(turtle.Turtle):
+    def __init__(self, position, direction):
+        super().__init__(shape='arrow')
+        self.speed(0)
+        self.color('white')
+        self.penup()
+        self.goto(position)
+        self.left(direction)
+
+        
+class Option(turtle.Turtle):
+    def __init__(self, position, message):
+        super().__init__()
+        self.speed(0)
+        self.color("white")
+        self.penup()
+        self.hideturtle()
+        self.goto(position)
+        self.write(message, align="center", font=("Courier", 20, "normal"))
+
 
 menu = Text((0, 20), "PRESS SPACE TO START", 35)
 left_paddle = Paddle((-360, 0))
 right_paddle = Paddle((360, 0))
 ball = Ball((0, 0))
 start = False
+
 # AI Starter
+single = Option((-150,-50), "SINGLEPLAYER")
+multi = Option((150, -50), "MULTIPLAYER")
+right_arrow = SelectionArrow((-35,-35), 180)
+left_arrow = SelectionArrow((-265, -35), 0)
 pc_play = False
 
 # Point Writing
@@ -92,6 +117,22 @@ def right_paddle_down():
     y -= 20
     right_paddle.sety(y)
 
+def selection_move_right():
+    rx = 255
+    lx = 40
+    right_arrow.setx(rx)
+    left_arrow.setx(lx)
+def selection_move_left():
+    rx = -35
+    lx = -265
+    right_arrow.setx(rx)
+    left_arrow.setx(lx)
+def game_mode():
+    if right_arrow.xcor() < 0 :
+        global pc_play 
+        pc_play = True
+    else:
+        pc_play = False
 
 # Key binding
 wind.listen()
@@ -101,15 +142,24 @@ wind.onkeypress(left_paddle_down, 's')
 wind.onkeypress(right_paddle_down, 'Down')
 wind.onkeypress(start_game, 'space')
 wind.onkeypress(exit_game, 'Escape')
+wind.onkeypress(selection_move_right, 'Right')
+wind.onkeypress(selection_move_left, 'Left')
 
 
 # Main game loop
 while True:
     wind.update()
+    game_mode()
 
     # Ball moving
     if start:
         menu.clear()
+        single.clear()
+        multi.clear()
+        right_arrow.hideturtle()
+        left_arrow.hideturtle()
+        wind.onkeypress(None, 'Right')
+        wind.onkeypress(None, 'Left')
         ball.setx(ball.xcor() + ball.dx)
         ball.sety(ball.ycor() + ball.dy)
 
