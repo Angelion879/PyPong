@@ -28,8 +28,8 @@ class Ball(turtle.Turtle):
         self.color("white")
         self.penup()
         self.goto(position)
-        self.dx = 0.5
-        self.dy = 0.5
+        self.dx = 0.3
+        self.dy = 0.3
 
 
 class Text(turtle.Turtle):
