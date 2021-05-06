@@ -1,5 +1,6 @@
 # Simple Python Pong
 import turtle
+import time
 
 # Screen creation and definition
 wind = turtle.Screen()
@@ -42,6 +43,7 @@ class Text(turtle.Turtle):
         self.goto(position)
         self.write(message, align="center", font=("Courier", l_size, "normal"))
 
+
 class SelectionArrow(turtle.Turtle):
     def __init__(self, position, direction):
         super().__init__(shape='arrow')
@@ -51,7 +53,7 @@ class SelectionArrow(turtle.Turtle):
         self.goto(position)
         self.left(direction)
 
-        
+
 class Option(turtle.Turtle):
     def __init__(self, position, message):
         super().__init__()
@@ -71,9 +73,9 @@ ball = Ball((0, 0))
 start = False
 
 # AI Starter
-single = Option((-150,-50), "SINGLEPLAYER")
+single = Option((-150, -50), "SINGLEPLAYER")
 multi = Option((150, -50), "MULTIPLAYER")
-right_arrow = SelectionArrow((-35,-35), 180)
+right_arrow = SelectionArrow((-35, -35), 180)
 left_arrow = SelectionArrow((-265, -35), 0)
 pc_play = False
 
@@ -118,22 +120,40 @@ def right_paddle_down():
     y -= 20
     right_paddle.sety(y)
 
+
+def ai_paddle_down():
+    y = left_paddle.ycor()
+    y -= 10
+    left_paddle.sety(y)
+
+
+def ai_paddle_up():
+    y = left_paddle.ycor()
+    y += 10
+    left_paddle.sety(y)
+
+
 def selection_move_right():
     rx = 255
     lx = 40
     right_arrow.setx(rx)
     left_arrow.setx(lx)
+
+
 def selection_move_left():
     rx = -35
     lx = -265
     right_arrow.setx(rx)
     left_arrow.setx(lx)
+
+
 def game_mode():
-    if right_arrow.xcor() < 0 :
-        global pc_play 
+    if right_arrow.xcor() < 0:
+        global pc_play
         pc_play = True
     else:
         pc_play = False
+
 
 # Key binding
 wind.listen()
@@ -196,13 +216,13 @@ while True:
 
     # AI Player
     if pc_play == True:
-        if left_paddle.ycor() < ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
-            left_paddle_up()
-        elif left_paddle.ycor() > ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
-            left_paddle_down()
+        if ball.xcor() < 0 and left_paddle.ycor() < ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
+            ai_paddle_up()
+        elif ball.xcor() < 0 and left_paddle.ycor() > ball.ycor() and abs(left_paddle.ycor() - ball.ycor()) > 20:
+            ai_paddle_down()
 
     # Winning condition
-    if (score_left >= 3) or (score_right >= 3):
+    if (score_left >= 5) or (score_right >= 5):
         start = False
         if score_left > score_right:
             menu.write(f"PLAYER A WINS", align="center",
